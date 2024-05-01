@@ -68,20 +68,26 @@ if (forecast?.TemperatureRanges != null)
 
 //get JSON temperatures ranges Option 2
 //Calling DictionaryExtensions
-WriteLine($"Temperature Ranges Option 2, using DictionaryExtensions: {forecast!.TemperatureRanges!.ToJsonString(options)}");
+WriteLine("Temperature Ranges Option 2, using DictionaryExtensions:" + 
+$"{forecast!.TemperatureRanges!.ToJsonString(options)}");
 
 //get JSON temperatures with new options
-options = CreateOptions(true, JsonNamingPolicy.SnakeCaseLower, builder => builder.SetEncoder(JavaScriptEncoder.Default));
+options = CreateOptions(true, JsonNamingPolicy.SnakeCaseLower, 
+                        builder => builder.SetEncoder(JavaScriptEncoder.Default));
 
 WriteLine($"JSON from a method with new options: \n{GetJsonOutput(forecast, options)}");
+
+//get JSON temperatures with new options upper case
+options = CreateOptions(true, new UpperCaseNamingPolicy(), 
+                        builder => builder.SetEncoder(JavaScriptEncoder.Default));
+
+WriteLine($"JSON from a method with new options upper case: \n{GetJsonOutput(forecast, options)}");
 
 //Return JSON from a method outputting it at a higher level
 static string GetJsonOutput(TemperatureInfo? forecast, JsonSerializerOptions options)
 {
     return JsonSerializer.Serialize(forecast, options);
 }
-
-
 
 //function getTemperatureJson return json content
 static string getTemperatureJson()
@@ -99,15 +105,14 @@ static string getTemperatureJson()
         }
     };
 
-    var builder = new JsonOptionsBuilder();
-    var opciones = builder
-        .SetWriteIndented(true)
-        .Build();
-
+    var opciones = new JsonOptionsBuilder().Build();
+    opciones = CreateOptions(true);
     return JsonSerializer.Serialize(temperatureInfo, opciones);
 }
 
-static JsonSerializerOptions CreateOptions(bool? writeIndented = null, JsonNamingPolicy? namingPolicy = null, Action<JsonOptionsBuilder>? configure = null)
+static JsonSerializerOptions CreateOptions(bool? writeIndented = null, 
+                   JsonNamingPolicy? namingPolicy = null, 
+                   Action<JsonOptionsBuilder>? configure = null)
 {
     var builder = new JsonOptionsBuilder();
 
@@ -185,6 +190,14 @@ public class JsonOptionsBuilder
         return options;
     }
     
+}
+
+public class UpperCaseNamingPolicy : JsonNamingPolicy
+{
+    public override string ConvertName(string name)
+    {
+        return name.ToUpper();
+    }
 }
 
 public static class DictionaryExtensions

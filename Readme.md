@@ -1,8 +1,19 @@
 # Serializando y Deserializando JSON con CSharp 12.0 y .Net 8.0
 
+Cambios en C# desde la versión 8.0 hasta la versión 12.0 y cómo se reflejan en tu código.
 
-
-
+1. **C# 12.0:**
+   - **Operador de rango**: Utilizamos el operador de rango en `e.Message[..20]`. Este es un nuevo operador introducido en C# 8.0 que proporciona una sintaxis más limpia para trabajar con rangos y matrices.
+   - **Tipos de referencia nullable**: En tu código, se utilizan tipos de referencia nullable, como en `TemperatureInfo? forecast`. Esta es una característica introducida en C# 8.0 que permite a los desarrolladores expresar cuando una referencia puede ser nula, lo que ayuda a prevenir errores de NullReferenceException.
+   - **Records**: En tu código, se utilizan records, como en `public record TemperatureInfo`. Esta es una característica introducida en C# 9.0 que proporciona una sintaxis concisa para crear tipos de valor inmutables.
+2. **Actualización de código:**
+   - Tu código ya parece estar utilizando algunas de las características más recientes de C#, como los operadores de rango, los tipos de referencia nullable y los records. Sin embargo, no hay características específicas de C# 12.0 en tu código, ya que C# 12.0 aún no se ha lanzado oficialmente.
+3. **Demostración de nuevas características:**
+   - Tu código ya demuestra el uso del operador de rango, los tipos de referencia nullable y los records. Para demostrar otras características, como las expresiones de tipo switch, necesitarías agregar más código.
+4. **Comparación de rendimiento:**
+   - Como asistente de programación AI, no puedo ejecutar tu código para realizar pruebas de rendimiento.
+5. **Pruebas de compatibilidad:**
+   - Como asistente de programación AI, no puedo ejecutar tu código para realizar pruebas de compatibilidad. Te recomendaría que pruebes tu código en las diferentes versiones de .NET que deseas soportar para asegurarte de que funciona correctamente.
 
 ## Best Practices for working with JSON in CSharp
 
@@ -243,3 +254,152 @@ JSON deserializado con `JsonNamingPolicy.CamelCase`
 }
 ```
 
+More information
+
+[How to customize property names and values with System.Text.Json](https://bit.ly/3y0DTmR)
+
+[How to serialize properties of derived classes with System.Text.Json - .NET8.0](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/polymorphism?pivots=dotnet-8-0)
+
+[What's new in System.Text.Json in .NET 8 - .NET Blog (microsoft.com)](https://devblogs.microsoft.com/dotnet/system-text-json-in-dotnet-8/)
+
+
+
+Para evolucionar el código de 
+
+
+
+```csharp
+using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace TextJson
+{
+    public interface IShapeVisitor
+    {
+        void Visit(Circle circle);
+        void Visit(Rectangle rectangle);
+        void Visit(Square square);
+        void Visit(Triangle triangle);
+    }
+
+    public abstract class Shape
+    {
+        public abstract void Accept(IShapeVisitor visitor);
+    }
+
+    public class Circle : Shape
+    {
+        public double Radius { get; set; }
+
+        public override void Accept(IShapeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    // Similar Accept methods for Rectangle, Square, and Triangle...
+
+    public class ShapeConverterWithTypeDiscriminator : JsonConverter<Shape>, IShapeVisitor
+    {
+        private Utf8JsonWriter _writer;
+        private JsonSerializerOptions _options;
+
+        public override Shape Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            // Similar to original...
+        }
+
+        public override void Write(Utf8JsonWriter writer, Shape shape, JsonSerializerOptions options)
+        {
+            _writer = writer;
+            _options = options;
+
+            writer.WriteStartObject();
+            shape.Accept(this);
+            writer.WriteEndObject();
+        }
+
+        public void Visit(Circle circle)
+        {
+            _writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.Circle);
+            _writer.WriteNumber("Radius", circle.Radius);
+        }
+
+        // Similar Visit methods for Rectangle, Square, and Triangle...
+    }
+}
+```
+
+Este código se puede mejorar utilizando el patrón de diseño Visitor para desacoplar el código de serialización/deserialización de las clases de formas (Shape). Esto permitirá que las clases de formas sean más limpias y que el código de serialización/deserialización sea más fácil de mantener.
+
+## Evolucionando código antiguo
+
+[BillyClassTime/System.Text.JsonInNET6.0 (github.com)](https://github.com/BillyClassTime/System.Text.JsonInNET6.0)
+
+Aquí está el código mejorado del proyecto de hace 3 años incorporando un patrón de diseño `Visitor`
+
+```csharp
+using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace TextJson
+{
+    public interface IShapeVisitor
+    {
+        void Visit(Circle circle);
+        void Visit(Rectangle rectangle);
+        void Visit(Square square);
+        void Visit(Triangle triangle);
+    }
+
+    public abstract class Shape
+    {
+        public abstract void Accept(IShapeVisitor visitor);
+    }
+
+    public class Circle : Shape
+    {
+        public double Radius { get; set; }
+
+        public override void Accept(IShapeVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+    }
+
+    // Similar Accept methods for Rectangle, Square, and Triangle...
+
+    public class ShapeConverterWithTypeDiscriminator : JsonConverter<Shape>, IShapeVisitor
+    {
+        private Utf8JsonWriter _writer;
+        private JsonSerializerOptions _options;
+
+        public override Shape Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            // Similar to original...
+        }
+
+        public override void Write(Utf8JsonWriter writer, Shape shape, JsonSerializerOptions options)
+        {
+            _writer = writer;
+            _options = options;
+
+            writer.WriteStartObject();
+            shape.Accept(this);
+            writer.WriteEndObject();
+        }
+
+        public void Visit(Circle circle)
+        {
+            _writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.Circle);
+            _writer.WriteNumber("Radius", circle.Radius);
+        }
+
+        // Similar Visit methods for Rectangle, Square, and Triangle...
+    }
+}
+```
+
+Este código utiliza el patrón de diseño Visitor para desacoplar el código de serialización/deserialización de las clases de formas. Cada forma tiene un método `Accept` que acepta un `IShapeVisitor`. El `ShapeConverterWithTypeDiscriminator` implementa `IShapeVisitor`, y cuando se llama a `shape.Accept(this)`, se llama al método `Visit` apropiado en `ShapeConverterWithTypeDiscriminator`, que realiza la serialización.
