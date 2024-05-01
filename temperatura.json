@@ -1,0 +1,19 @@
+{
+    "Date": "2024-05-01T00:00:00",
+    "Temperature": 25,
+    "Summary": "Hot",
+    "DatesAvailable": [
+      "2024-05-01T00:00:00",
+      "2024-05-02T00:00:00"
+    ],
+    "TemperatureRanges": {
+      "Cold": {
+        "High": 23,
+        "Low": -9
+      },
+      "Hot": {
+        "High": 51,
+        "Low": 32
+      }
+    }
+  }
