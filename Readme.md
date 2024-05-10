@@ -1,19 +1,14 @@
 # Serializando y Deserializando JSON con CSharp 12.0 y .Net 8.0
 
-Cambios en C# desde la versión 8.0 hasta la versión 12.0 y cómo se reflejan en tu código.
+Aspectos en C# desde la versión 8.0 hasta la versión 12.0 y cómo se reflejan en tu código.
 
-1. **C# 12.0:**
+1. **C# 8.0:**
    - **Operador de rango**: Utilizamos el operador de rango en `e.Message[..20]`. Este es un nuevo operador introducido en C# 8.0 que proporciona una sintaxis más limpia para trabajar con rangos y matrices.
-   - **Tipos de referencia nullable**: En tu código, se utilizan tipos de referencia nullable, como en `TemperatureInfo? forecast`. Esta es una característica introducida en C# 8.0 que permite a los desarrolladores expresar cuando una referencia puede ser nula, lo que ayuda a prevenir errores de NullReferenceException.
-   - **Records**: En tu código, se utilizan records, como en `public record TemperatureInfo`. Esta es una característica introducida en C# 9.0 que proporciona una sintaxis concisa para crear tipos de valor inmutables.
-2. **Actualización de código:**
-   - Tu código ya parece estar utilizando algunas de las características más recientes de C#, como los operadores de rango, los tipos de referencia nullable y los records. Sin embargo, no hay características específicas de C# 12.0 en tu código, ya que C# 12.0 aún no se ha lanzado oficialmente.
+   - **Tipos de referencia nullable**: Utilizanción de tipos de referencia nullable, como en `TemperatureInfo? forecast`. Esta es una característica introducida en C# 8.0 que permite a los desarrolladores expresar cuando una referencia puede ser nula, lo que ayuda a prevenir errores de NullReferenceException.
+2. **C# 9.0:**
+   - **Records**: Utilización de records, como en `public record TemperatureInfo`. Esta es una característica introducida en C# 9.0 que proporciona una sintaxis concisa para crear tipos de valor inmutables.
 3. **Demostración de nuevas características:**
-   - Tu código ya demuestra el uso del operador de rango, los tipos de referencia nullable y los records. Para demostrar otras características, como las expresiones de tipo switch, necesitarías agregar más código.
-4. **Comparación de rendimiento:**
-   - Como asistente de programación AI, no puedo ejecutar tu código para realizar pruebas de rendimiento.
-5. **Pruebas de compatibilidad:**
-   - Como asistente de programación AI, no puedo ejecutar tu código para realizar pruebas de compatibilidad. Te recomendaría que pruebes tu código en las diferentes versiones de .NET que deseas soportar para asegurarte de que funciona correctamente.
+   - Uso del operador de rango, los tipos de referencia nullable y los records. 
 
 ## Best Practices for working with JSON in CSharp
 
@@ -26,21 +21,18 @@ Cambios en C# desde la versión 8.0 hasta la versión 12.0 y cómo se reflejan e
 7. **Security**: Be aware of potential security implications when working with JSON, such as JavaScript injection attacks when using JSON within JavaScript code.
 8. **Performance**: If performance is a concern, consider using the `Utf8JsonReader` and `Utf8JsonWriter` types for reading and writing UTF-8 encoded JSON text. These types offer high performance and low allocation reading and writing of UTF-8 encoded JSON text.
 
-**Use Strongly Typed Models**:
+### Summary and check list
 
-**Error Handling**
+- [ ] **Use Strongly Typed Models**:
+- [ ] **Error Handling**
+- [ ] **Null Checking**: 
+- [ ] **Use Libraries**:
+- [ ] **Avoid Manual Parsing**
+- [ ] **Formatting and Readability**:
+- [ ] **Security**
+- [ ] **Performance**
 
-**Null Checking**: 
-
-**Use Libraries**:
-
-**Avoid Manual Parsing**
-
-**Formatting and Readability**:
-
-**Security**
-
-**Performance**
+### Points to review:
 
 ```Powershell
 Could you review if this code complais with the best practices in JSON with CSharp. Considering:
@@ -53,9 +45,9 @@ Could you review if this code complais with the best practices in JSON with CSha
 4. **Mejoras en el manejo de excepciones**: En C# 10.0, puedes usar la declaración `throw` en expresiones.
 5. **Mejoras en las asignaciones de variables**: En C# 10.0, puedes usar la declaración `var` en las asignaciones de variables.
 
+### Result verifiying best practices
 
-
-Your code generally follows good practices for working with JSON in C#. Here are some specific points:
+Code follows good practices for working with JSON in C#
 
 1. **Use Strongly Typed Models**: You're using strongly typed models (`TemperatureInfo`, `TemperatureRange`) for deserialization which is a good practice.
 
@@ -120,7 +112,7 @@ public class JsonOptionsBuilder
 }
 ```
 
-Uso del anterior patrón:
+### Using Builder pattern
 
 ```csharp
 var builder = new JsonOptionsBuilder();
@@ -130,7 +122,7 @@ var options = builder
     .Build();
 ```
 
-Código anterior antes de implementar el patrón:
+### Before of implementation builder pattner
 
 ```csharp
 static class JsonOptions
@@ -159,7 +151,8 @@ static class JsonOptions
 }
 ```
 
-Clase unificada:
+### Put all in together 
+
 ```csharp
 public class JsonOptionsBuilder
 {
@@ -206,7 +199,7 @@ public class JsonOptionsBuilder
 }
 ```
 
-JSON serializado con `JsonNamingPolicy.SnakeCaseLower`
+## JSON serializing with `JsonNamingPolicy.SnakeCaseLower`
 
 ```json
 {
@@ -230,7 +223,7 @@ JSON serializado con `JsonNamingPolicy.SnakeCaseLower`
 }
 ```
 
-JSON deserializado con `JsonNamingPolicy.CamelCase`
+### JSON deserializing with `JsonNamingPolicy.CamelCase`
 
 ```json
 {
@@ -264,9 +257,7 @@ More information
 
 
 
-Para evolucionar el código de 
-
-
+### Code evolution
 
 ```csharp
 using System;
